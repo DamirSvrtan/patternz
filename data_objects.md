@@ -1,0 +1,95 @@
+# Data Objects
+
+Data objects are used for encapsulating complex data-structures into objects rather than into primitives such as arrays or hashes.
+
+Data objects give us:
+  - Better introspect into what our data structure holds
+  - Flexibility to manipulate data in a uniform place
+  - Convenience of adding additional behavior (i.e. methods)
+
+## Example
+
+We got a list of cities in a CSV format and we have to store them in our database.
+Each city comes with the following three informations: country code, city code and a name:
+
+```csv
+US, NYC, New York City
+US, LA, Los Angeles
+US, SF, San Francisco
+```
+
+However - the CSV is malformed and some of the cities came without a name so we have to ignore those.
+
+We want to retrieve the cities from the CSV in Ruby - natively they would come as an array of arrays:
+
+```ruby
+[['US', 'NYC', 'New York City'],['US', 'LA', 'Los Angeles'],['US', 'SF', 'San Francisco']]
+```
+
+Let's write a simple CityImporter:
+
+```ruby
+class CityImporter
+  attr_accessor :csv_file_path
+
+  def initialize(csv_file_path)
+    @csv_rows = CSV.read(csv_file_path)
+  end
+
+  def import
+    csv_rows.each do |csv_row|
+      if csv_row[2].present?
+        City.create(name: csv_row[2].titleize,
+                    code: "#{csv_row[0].capitalize}#{csv_row[1].capitalize}")
+      end
+    end
+  end
+end
+```
+
+1. Can you tell what the #import method does **without looking** at our CSV structure? The #import method is unreadable. And note, this is an oversimplified version of the real world example.
+
+2. What would happen if we reorganized the order of our columns? We would have to calculate column position multiple times and possibly at multiple places.
+
+### Solution:
+
+We could ditch our complex array of arrays and create an array of objects that nicely show the data in them:
+
+```ruby
+class CSVCity
+  attr_reader :country_code, :location_code, :name
+
+  def initialize(csv_row)
+    @country_code = csv_row[0].capitalize
+    @city_code    = csv_row[1].capitalize
+    @name         = csv_row[2].titleize
+  end
+
+  def code
+    "#{country_code}#{city_code}"
+  end
+
+  def name_present?
+    name.present?
+  end
+end
+```
+
+With the CSV city holding all of our data, our CityImporter class is a lot more readable:
+
+```ruby
+class LocationImporter
+  attr_accessor :codes_csv_path, :csv_rows, :csv_cities
+
+  def initialize(csv_file_path)
+    @csv_rows = CSV.read(csv_file_path)
+    @csv_cities = csv_rows.map { |csv_row| CSVCity.new(csv_row) }
+  end
+
+  def import
+    csv_cities.select(&:name_present?).each do |csv_city|
+      City.create(name: csv_city.name, code: csv_city.code)
+    end
+  end
+end
+```

@@ -12,6 +12,7 @@ Data objects give us:
 ### Assignment
 
 We got a list of cities in a CSV format and we have to store them in our database.
+
 Each city comes with the following three informations: country code, city code and a name:
 
 ```csv
@@ -21,7 +22,7 @@ US, SF, san francisco
 ```
 
 The CSV is not exactly in the format that we want:
-  - we need all of the words in a cities name to have a leading uppercase letter
+  - we need all of the words in a cities name to be capitalized
   - the codes aren't in a way we need them - we want to store them concatenated - `USNYC` instead of `US` & `NYC`
   - the CSV is malformed and some of the cities came without a name - we have to ignore those.
 

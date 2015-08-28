@@ -1,16 +1,18 @@
 # patternz
 ## [Data Objects](/data_objects.md)
-## Null Objects
-## Presenters
-## Decorators
-## Form Objects
+## Null Objects - Jan
+## Presenters - Dzani
+## Decorators - Dzani
+## Form Objects - Jan
 * [Active Type](https://github.com/makandra/active_type)
 * [Reform](https://github.com/apotonick/reform)
+* [Active Model Model]
+* [Virtus]
 
-## Service Objects
+## Service Objects / Interactions 
 ## Query Objects
-## Adapters
-## Value Objects
+## Adapters - Nenad
+## Value Objects 
 ## Policies
-## View Objects
+## View Objects 
 

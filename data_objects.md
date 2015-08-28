@@ -9,16 +9,23 @@ Data objects give us:
 
 ## Example
 
+### Assignment
+
 We got a list of cities in a CSV format and we have to store them in our database.
 Each city comes with the following three informations: country code, city code and a name:
 
 ```csv
-US, NYC, New York City
-US, LA, Los Angeles
-US, SF, San Francisco
+US, NYC, new york city
+US, LA, los angeles
+US, SF, san francisco
 ```
 
-However - the CSV is malformed and some of the cities came without a name so we have to ignore those.
+The CSV is not exactly in the format that we want:
+  - we need all of the words in a cities name to have a leading uppercase letter
+  - the codes aren't in a way we need them - we want to store them concatenated - `USNYC` instead of `US` & `NYC`
+  - the CSV is malformed and some of the cities came without a name - we have to ignore those.
+
+### Bad Solution
 
 We want to retrieve the cities from the CSV in Ruby - natively they would come as an array of arrays:
 
@@ -26,7 +33,7 @@ We want to retrieve the cities from the CSV in Ruby - natively they would come a
 [['US', 'NYC', 'New York City'],['US', 'LA', 'Los Angeles'],['US', 'SF', 'San Francisco']]
 ```
 
-Let's write a simple CityImporter:
+Let's write a simple `CityImporter` class that would handle this:
 
 ```ruby
 class CityImporter
@@ -40,7 +47,7 @@ class CityImporter
     csv_rows.each do |csv_row|
       if csv_row[2].present?
         City.create(name: csv_row[2].titleize,
-                    code: "#{csv_row[0].capitalize}#{csv_row[1].capitalize}")
+                    code: "#{csv_row[0].upcase}#{csv_row[1].upcase}")
       end
     end
   end
@@ -51,17 +58,17 @@ end
 
 2. What would happen if we reorganized the order of our columns? We would have to calculate column position multiple times and possibly at multiple places.
 
-### Solution:
+### Good Solution:
 
-We could ditch our complex array of arrays and create an array of objects that nicely show the data in them:
+We could ditch our unreadable arrays and create an object that plays nicely with our CSV data:
 
 ```ruby
 class CSVCity
   attr_reader :country_code, :location_code, :name
 
   def initialize(csv_row)
-    @country_code = csv_row[0].capitalize
-    @city_code    = csv_row[1].capitalize
+    @country_code = csv_row[0].upcase
+    @city_code    = csv_row[1].upcase
     @name         = csv_row[2].titleize
   end
 

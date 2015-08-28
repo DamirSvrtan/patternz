@@ -59,7 +59,7 @@ end
 
 2. What would happen if we reorganized the order of our columns? We would have to calculate column position multiple times and possibly at multiple places.
 
-### Good Solution:
+### Good Solution
 
 We could ditch our unreadable arrays and create an object that plays nicely with our CSV data:
 
@@ -101,3 +101,26 @@ class LocationImporter
   end
 end
 ```
+
+### Questions
+
+#### Couldn't this go into a model?
+
+A possible solution **(but a really bad one)** would be to create a "factory" class method called `from_csv` in our `City` model:
+
+```ruby
+class City < ActiveRecord::Base
+  def self.from_csv(csv_file)
+    CSV.read(csv_file_path).each do |csv_row|
+      if csv_row[2].present?
+        City.create(name: csv_row[2].titleize,
+                    code: "#{csv_row[0].upcase}#{csv_row[1].upcase}")
+      end
+    end
+  end
+end
+```
+
+This is not a good solution because our `City` model should not have the responsibility of importing csv files, but rather only handle database persistance.
+
+Although this is just one method, our model would become bloated with a more complex example and with more similar tasks.

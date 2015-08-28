@@ -1,5 +1,5 @@
 # patternz
-
+## [Data Objects](/data_objects.md)
 ## Null Objects
 ## Presenters
 ## Decorators
@@ -13,4 +13,4 @@
 ## Value Objects
 ## Policies
 ## View Objects
-## Data Objects
+

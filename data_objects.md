@@ -55,7 +55,7 @@ class CityImporter
 end
 ```
 
-1. Can you tell what the #import method does **without looking** at our CSV structure? The #import method is unreadable. And note, this is an oversimplified version of the real world example.
+1. Can you tell what the #import method does **without looking** at our CSV structure? The #import method is unreadable. And note, **this is an oversimplified version of the real world example.**
 
 2. What would happen if we reorganized the order of our columns? We would have to calculate column position multiple times and possibly at multiple places.
 

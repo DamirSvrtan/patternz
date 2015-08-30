@@ -124,3 +124,9 @@ end
 This is not a good solution because our `City` model should not have the responsibility of importing csv files, but rather only handle database persistance.
 
 Although this is just one method, our model would become bloated with a more complex example and with more similar tasks.
+
+### Where to put the `CSVCity` and `CityImporter` class?
+
+There are multiple places where you could put this kind of code, a good place could be:
+  - create a folder `app/csv_importers` and add the `CityImporter` there, and the `CSVCity` inside the same class.
+  - if you're using this in something like a rake task, you can write that content in the rake task file itself.

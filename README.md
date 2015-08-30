@@ -2,7 +2,7 @@
 ## [Data Objects](/data_objects.md)
 ## Null Objects - Jan
 ## Presenters - Dzani
-## Decorators - Dzani
+## [Decorators](/decorators.md)
 ## Form Objects - Jan
 * [Active Type](https://github.com/makandra/active_type)
 * [Reform](https://github.com/apotonick/reform)
